@@ -36,12 +36,12 @@
             this.txtPrice = new System.Windows.Forms.TextBox();
             this.btnAdd = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.numQuantity = new System.Windows.Forms.NumericUpDown();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numQuantity)).BeginInit();
             this.SuspendLayout();
             // 
             // lstOwnedCards
@@ -83,6 +83,7 @@
             // 
             this.txtRarity.Location = new System.Drawing.Point(1143, 60);
             this.txtRarity.Name = "txtRarity";
+            this.txtRarity.ReadOnly = true;
             this.txtRarity.Size = new System.Drawing.Size(100, 31);
             this.txtRarity.TabIndex = 4;
             // 
@@ -90,6 +91,7 @@
             // 
             this.txtPrice.Location = new System.Drawing.Point(1143, 162);
             this.txtPrice.Name = "txtPrice";
+            this.txtPrice.ReadOnly = true;
             this.txtPrice.Size = new System.Drawing.Size(100, 31);
             this.txtPrice.TabIndex = 5;
             // 
@@ -101,6 +103,7 @@
             this.btnAdd.TabIndex = 6;
             this.btnAdd.Text = "Add";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // label3
             // 
@@ -111,12 +114,13 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "Card Quantity";
             // 
-            // numericUpDown1
+            // numQuantity
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(1143, 268);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 31);
-            this.numericUpDown1.TabIndex = 8;
+            this.numQuantity.Location = new System.Drawing.Point(1143, 268);
+            this.numQuantity.Name = "numQuantity";
+            this.numQuantity.ReadOnly = true;
+            this.numQuantity.Size = new System.Drawing.Size(120, 31);
+            this.numQuantity.TabIndex = 8;
             // 
             // btnDelete
             // 
@@ -153,7 +157,7 @@
             this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnDelete);
-            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.numQuantity);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.txtPrice);
@@ -165,7 +169,7 @@
             this.Name = "frmCollections";
             this.Text = "frmCollections";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numQuantity)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -181,7 +185,7 @@
         private System.Windows.Forms.TextBox txtPrice;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown numQuantity;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnEdit;
