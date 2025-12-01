@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassLibrary\Card.cs" />
+    <Compile Include="ClassLibrary\DatabaseService.cs" />
     <Compile Include="frmAddCard.cs">
       <SubType>Form</SubType>
     </Compile>
