@@ -12,11 +12,16 @@ namespace Pokemon_TCG_Manager
 {
     public partial class frmMain : Form
     {
-        private int userID;
-        public frmMain(int userId)
+        //private int userID;
+        private int _userID;
+        private frmLogin prevFrm;
+        public frmMain(int userid, frmLogin loginFrm)
         {
             InitializeComponent();
-            userID = userId;
+            _userID = userid;
+            prevFrm = loginFrm;
+
+            //userID = userId;
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -26,12 +31,20 @@ namespace Pokemon_TCG_Manager
 
         private void btnGoToCollections_Click(object sender, EventArgs e)
         {
-            new frmCollections(userID).ShowDialog();
+            new frmCollections(_userID).ShowDialog();
+           
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            int userID = Session.LoggedInUserId;
+           // prevFrm.Close();
+            
         }
     }
 }

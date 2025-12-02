@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="ClassLibrary\Card.cs" />
     <Compile Include="ClassLibrary\DatabaseService.cs" />
+    <Compile Include="Session.cs" />
     <Compile Include="ClassLibrary\UserService.cs" />
     <Compile Include="frmAddCard.cs">
       <SubType>Form</SubType>

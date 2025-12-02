@@ -16,10 +16,12 @@ namespace Pokemon_TCG_Manager
         private List<Card> ownedCards = new List<Card>();
         private DatabaseService _db = new DatabaseService();
         private int _currentUserId; // make sure this gets passed in at login
-        public frmCollections(int userId)
+        public frmCollections(int userID)
         {
             InitializeComponent();
-            int _currentUserId = userId;
+            _currentUserId = userID;
+            LoadUserOwnedCards();
+            DisplayCards();
         }
 
         private void frmCollections_Load(object sender, EventArgs e)
@@ -60,6 +62,7 @@ namespace Pokemon_TCG_Manager
              */
             txtRarity.Text = selected.Rarity;
             txtPrice.Text = selected.Price.ToString("C");
+            numQuantity.Value = selected.Quantity;
             //txtSupertype.Text = selected.Supertype;
             //txtSubtype.Text = selected.Subtype;
             //numHealth.Value = selected.Health;
@@ -78,7 +81,7 @@ namespace Pokemon_TCG_Manager
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (lstOwnedCards.SelectedIndex == -1) return;
-
+            // update delete method
             ownedCards.RemoveAt(lstOwnedCards.SelectedIndex);
             DisplayCards();
         }
@@ -116,7 +119,8 @@ namespace Pokemon_TCG_Manager
 
         private void btnAddCard_Click(object sender, EventArgs e)
         {
-            frmAddCard addForm = new frmAddCard(CurrentUserId);
+            frmAddCard addForm = new frmAddCard(_currentUserId);
+            //addForm.ShowDialog();
 
             if (addForm.ShowDialog() == DialogResult.OK)
                 LoadUserOwnedCards();  // refresh collection list

@@ -15,7 +15,8 @@ namespace Pokemon_TCG_Manager
     {
         private UserService _users = new UserService();
 
-        public int LoggedInUserId { get; private set; } = -1;
+      //  public int LoggedInUserId { get; private set; } = -1;
+        public static int LoggedInUserId { get; private set; } = -1;
 
         public frmLogin()
         {
@@ -28,20 +29,27 @@ namespace Pokemon_TCG_Manager
             {
                 LoggedInUserId = userId;
                 DialogResult = DialogResult.OK;
-                frmMain create = new frmMain(LoggedInUserId); // pass userID when frmMain expects one, 
-                create.Show();
-                this.Hide();
+                LoginUser(userId, txtUsername.Text);
             }
             else
             {
                 MessageBox.Show("Incorrect username or password.");
             }
+            
         }
 
         private void btnCreateAccount_Click(object sender, EventArgs e)
         {
             frmCreateAccount create = new frmCreateAccount();
             create.ShowDialog();
+        }
+        private void LoginUser(int userID, string username)
+        {
+            Session.LoggedInUserId = userID;
+            Session.LoggedInUsername = username;
+            frmMain main = new frmMain(userID, this);
+            main.Show();
+            this.Hide();
         }
 
       
