@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace LanguageTutor.ClassLibrary
+namespace Pokemon_TCG_Manager.ClassLibrary
 {
     public class DatabaseService
     {
@@ -21,7 +21,7 @@ namespace LanguageTutor.ClassLibrary
                 Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)
                          .Parent.Parent.Parent.FullName;
 
-            string dbPath = Path.Combine(projectPath, "LanguageTutor.accdb"); // change to your db file name
+            string dbPath = Path.Combine(projectPath, "Cards.accdb"); // change to your db file name
 
             _connectionString =
                 $"Provider=Microsoft.ACE.OLEDB.16.0;Data Source={dbPath}";
@@ -81,6 +81,50 @@ namespace LanguageTutor.ClassLibrary
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
+        // USER methods
+
+        public DataTable GetUserByCredentials(string username, string password)
+        {
+            return ExecuteQuery(
+                "SELECT * FROM Users WHERE UserName = ? AND Password = ?",
+                username, password
+            );
+        }
+
+        public bool UsernameExists(string username)
+        {
+            DataTable result = ExecuteQuery(
+                "SELECT * FROM Users WHERE UserName = ?",
+                username
+            );
+            return result.Rows.Count > 0;
+        }
+
+        public int CreateUser(string username, string password)
+        {
+            return ExecuteInsertAndReturnId(
+                "INSERT INTO Users (UserName, Password) VALUES (?, ?)",
+                username, password
+            );
+        }
+
+
+        // card methods
+        public DataTable GetAllCards()
+        {
+            return ExecuteQuery("SELECT * FROM Cards ORDER BY CardName");
+        }
+        /* method not matched to real db naming */
+        //public int InsertCard(Card c)
+        //{
+        //    return ExecuteInsertAndReturnId(
+        //        "INSERT INTO Cards (SetId, PokedexNumber, CardName, Rarity, Supertype, Subtype, Health, Price, CardImage) " +
+        //        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        //        c.SetId, c.PokedexNumber, c.CardName, c.Rarity,
+        //        c.Supertype, c.Subtype, c.Health, c.Price, c.CardImage
+        //    );
+        //}
+
 
 
         // lesson tutor specific methods
