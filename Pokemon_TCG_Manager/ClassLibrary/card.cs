@@ -19,6 +19,9 @@ namespace Pokemon_TCG_Manager.ClassLibrary
         public double Price { get; set; }          // Card price
         public string CardImage { get; set; }      // Filename or image path
 
+        public int Quantity { get; set; }          // Not Stored in Card table - Used for tracking owned quantity in collections
+
+
         // Optional convenience constructor (you can use this when adding cards manually)
         public Card(int setID, string cardNumber, string cardName, string rarity, string supertype, string subtype, int health, double price, string cardImage)
         {

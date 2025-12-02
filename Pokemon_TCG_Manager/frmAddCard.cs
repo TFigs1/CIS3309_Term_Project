@@ -15,9 +15,14 @@ namespace Pokemon_TCG_Manager
     public partial class frmAddCard : Form
     {
         public Card NewCard;
-        public frmAddCard()
+        private int _currentUserId;
+        private DatabaseService _db;
+
+        public frmAddCard(int userId)
         {
             InitializeComponent();
+            _currentUserId = userId;
+            _db = new DatabaseService();
             // Populate Rarity dropdown
             cmbRarity.Items.AddRange(new string[]
             {
@@ -64,23 +69,22 @@ namespace Pokemon_TCG_Manager
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            // Validate inputs
             if (string.IsNullOrWhiteSpace(txtCardName.Text))
             {
-                MessageBox.Show("Please enter a card name.", "Missing Data");
+                MessageBox.Show("Please enter a card name.");
                 return;
             }
 
             if (!double.TryParse(txtPrice.Text, out double price))
             {
-                MessageBox.Show("Please enter a valid price.", "Invalid Input");
+                MessageBox.Show("Invalid price.");
                 return;
             }
 
-            // Create new card object
-            NewCard = new Card
+            // Build card object
+            Card newCard = new Card
             {
-                SetID = cmbSet.SelectedIndex + 1, // temporary — later match actual SetID from DB
+                SetID = cmbSet.SelectedIndex + 1,
                 CardNumber = txtCardNumber.Text.Trim(),
                 CardName = txtCardName.Text.Trim(),
                 Rarity = cmbRarity.Text,
@@ -91,8 +95,16 @@ namespace Pokemon_TCG_Manager
                 CardImage = txtImagePath.Text.Trim()
             };
 
+            // 1. Insert into tblCards
+            int cardId = _db.InsertCard(newCard);   // returns AutoNumber ID
+
+            // 2. Insert into tblOwnedCards for current user
+            _db.InsertOwnedCard(_currentUserId, cardId, 1);
+
+            MessageBox.Show("Card added successfully!");
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
+
     }
 }

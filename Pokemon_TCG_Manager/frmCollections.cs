@@ -14,16 +14,19 @@ namespace Pokemon_TCG_Manager
     public partial class frmCollections : Form
     {
         private List<Card> ownedCards = new List<Card>();
-
-        public frmCollections()
+        private DatabaseService _db = new DatabaseService();
+        private int _currentUserId; // make sure this gets passed in at login
+        public frmCollections(int userId)
         {
             InitializeComponent();
+            int _currentUserId = userId;
         }
 
         private void frmCollections_Load(object sender, EventArgs e)
         {
             // Load owned cards from database (for now, use sample data)
-            LoadSampleCards();
+            //LoadSampleCards();
+            LoadUserOwnedCards();
             DisplayCards();
         }
 
@@ -80,19 +83,46 @@ namespace Pokemon_TCG_Manager
             DisplayCards();
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        
+
+        private void LoadUserOwnedCards()
         {
-            using (frmAddCard addCardForm = new frmAddCard())
+            ownedCards.Clear();
+            lstOwnedCards.Items.Clear();
+
+            DataTable table = _db.GetOwnedCards(_currentUserId);
+
+            foreach (DataRow row in table.Rows)
             {
-                if (addCardForm.ShowDialog() == DialogResult.OK)
+                Card c = new Card
                 {
-                    ownedCards.Add(addCardForm.NewCard);
-                    DisplayCards();
-                }
+                    CardID = Convert.ToInt32(row["CardID"]),
+                    SetID = Convert.ToInt32(row["SetID"]),
+                    CardNumber = row["CardNumber"].ToString(),
+                    CardName = row["CardName"].ToString(),
+                    Rarity = row["Rarity"].ToString(),
+                    Supertype = row["Supertype"].ToString(),
+                    Subtype = row["Subtype"].ToString(),
+                    Health = Convert.ToInt32(row["Health"]),
+                    Price = Convert.ToDouble(row["Price"]),
+                    CardImage = row["CardImage"].ToString(),
+                    Quantity = Convert.ToInt32(row["Quantity"])
+                };
+
+                ownedCards.Add(c);
+                lstOwnedCards.Items.Add(c.CardName);
             }
-
         }
+
+        private void btnAddCard_Click(object sender, EventArgs e)
+        {
+            frmAddCard addForm = new frmAddCard(CurrentUserId);
+
+            if (addForm.ShowDialog() == DialogResult.OK)
+                LoadUserOwnedCards();  // refresh collection list
+        }
+
     }
 
 
-    }
+}

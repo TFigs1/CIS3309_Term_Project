@@ -120,8 +120,52 @@ namespace Pokemon_TCG_Manager.ClassLibrary
         // card methods
         public DataTable GetAllCards()
         {
-            return ExecuteQuery("SELECT * FROM Cards ORDER BY CardName");
+            return ExecuteQuery("SELECT * FROM tblCards ORDER BY CardName");
         }
+
+        public int InsertCard(Card c)
+        {
+            string sql =
+                "INSERT INTO tblCards (SetID, CardNumber, CardName, Rarity, Supertype, Subtype, Health, Price, CardImage) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            return ExecuteInsertAndReturnId(
+                sql,
+                c.SetID,
+                c.CardNumber,
+                c.CardName,
+                c.Rarity,
+                c.Supertype,
+                c.Subtype,
+                c.Health,
+                c.Price,
+                c.CardImage
+            );
+        }
+
+        public void InsertOwnedCard(int userId, int cardId, int quantity)
+        {
+            ExecuteNonQuery(
+                "INSERT INTO tblOwnedCards (UserID, CardID, Quantity) VALUES (?, ?, ?)",
+                userId,
+                cardId,
+                quantity
+            );
+        }
+
+        public DataTable GetOwnedCards(int userId)
+        {
+            string sql =
+                "SELECT tblCards.*, tblOwnedCards.Quantity " +
+                "FROM tblCards INNER JOIN tblOwnedCards " +
+                "ON tblCards.CardID = tblOwnedCards.CardID " +
+                "WHERE tblOwnedCards.UserID = ? " +
+                "ORDER BY tblCards.CardName";
+
+            return ExecuteQuery(sql, userId);
+        }
+
+
         /* method not matched to real db naming */
         //public int InsertCard(Card c)
         //{

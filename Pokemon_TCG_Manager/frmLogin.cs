@@ -28,7 +28,7 @@ namespace Pokemon_TCG_Manager
             {
                 LoggedInUserId = userId;
                 DialogResult = DialogResult.OK;
-                frmMain create = new frmMain(); // pass userID when frmMain expects one, 
+                frmMain create = new frmMain(LoggedInUserId); // pass userID when frmMain expects one, 
                 create.Show();
                 this.Hide();
             }
