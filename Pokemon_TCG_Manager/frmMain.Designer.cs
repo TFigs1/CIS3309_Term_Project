@@ -40,6 +40,7 @@
             this.btnGoToCollections.TabIndex = 0;
             this.btnGoToCollections.Text = "Go to collections";
             this.btnGoToCollections.UseVisualStyleBackColor = true;
+            this.btnGoToCollections.Click += new System.EventHandler(this.btnGoToCollections_Click);
             // 
             // label1
             // 

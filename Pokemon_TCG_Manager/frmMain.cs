@@ -21,5 +21,10 @@ namespace Pokemon_TCG_Manager
         {
 
         }
+
+        private void btnGoToCollections_Click(object sender, EventArgs e)
+        {
+            new frmCollections().ShowDialog();
+        }
     }
 }

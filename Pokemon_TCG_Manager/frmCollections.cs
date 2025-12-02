@@ -13,7 +13,8 @@ namespace Pokemon_TCG_Manager
 {
     public partial class frmCollections : Form
     {
-        private List<card> ownedCards = new List<card>();
+        private List<Card> ownedCards = new List<Card>();
+
         public frmCollections()
         {
             InitializeComponent();
@@ -21,52 +22,55 @@ namespace Pokemon_TCG_Manager
 
         private void frmCollections_Load(object sender, EventArgs e)
         {
-            // Load owned cards from database
+            // Load owned cards from database (for now, use sample data)
             LoadSampleCards();
             DisplayCards();
         }
 
         private void LoadSampleCards()
         {
-            ownedCards.Add(new card("Pikachu", "Common", 5.00m, "path/to/pikachu.jpg", 2));
-            ownedCards.Add(new card("Charizard", "Rare", 150.00m, "path/to/charizard.jpg", 1));
-            ownedCards.Add(new card("Bulbasaur", "Common", 3.00m, "path/to/bulbasaur.jpg", 4));
+            // Using the new constructor that matches the updated Card class
+            ownedCards.Add(new Card(1, "025", "Pikachu", "Common", "Pokémon", "Basic", 60, 5.00, "pikachu.jpg"));
+            ownedCards.Add(new Card(1, "006", "Charizard EX", "Ultra Rare", "Pokémon", "EX", 180, 150.00, "charizard.jpg"));
+            ownedCards.Add(new Card(2, "001", "Bulbasaur", "Common", "Pokémon", "Basic", 70, 3.00, "bulbasaur.jpg"));
         }
+
         private void DisplayCards()
         {
             lstOwnedCards.Items.Clear();
             foreach (var card in ownedCards)
             {
-                lstOwnedCards.Items.Add(card.Name);
+                // Card.ToString() now gives something like "Pikachu (Common) - $5.00"
+                lstOwnedCards.Items.Add(card);
             }
         }
-        private void lstOwnedCards_SelectedIndexChanged(object sender, EventArgs e) {
+
+        private void lstOwnedCards_SelectedIndexChanged(object sender, EventArgs e)
+        {
             if (lstOwnedCards.SelectedIndex == -1) return;
-            card selected = ownedCards[lstOwnedCards.SelectedIndex];
+
+            Card selected = ownedCards[lstOwnedCards.SelectedIndex];
+
+            // Update textboxes/fields
+            /* 
+             * Not yet fully implemented 
+             */
             txtRarity.Text = selected.Rarity;
             txtPrice.Text = selected.Price.ToString("C");
-            numQuantity.Value = selected.Quantity;
+            //txtSupertype.Text = selected.Supertype;
+            //txtSubtype.Text = selected.Subtype;
+            //numHealth.Value = selected.Health;
 
-            // try to load img
+            //// Try to load card image
             //try
             //{
-            //    picCardImage.Image =
+            //    picCardImage.Image = Image.FromFile($"Images\\{selected.CardImage}");
             //}
             //catch
             //{
-            //    picCardImage.image = null;
+            //    picCardImage.Image = null;
             //}
         }
-
-        //private void btnAdd_Click(object sender, EventArgs e)
-        //{
-        //    AddCardForm addForm = new AddCardForm();
-        //    if (addForm.ShowDialog() == DialogResult.OK)
-        //    {
-        //        ownedCards.Add(addForm.NewCard);
-        //        DisplayCards();
-        //    }
-        //}
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
@@ -74,6 +78,19 @@ namespace Pokemon_TCG_Manager
 
             ownedCards.RemoveAt(lstOwnedCards.SelectedIndex);
             DisplayCards();
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            using (frmAddCard addCardForm = new frmAddCard())
+            {
+                if (addCardForm.ShowDialog() == DialogResult.OK)
+                {
+                    ownedCards.Add(addCardForm.NewCard);
+                    DisplayCards();
+                }
+            }
+
         }
     }
 
