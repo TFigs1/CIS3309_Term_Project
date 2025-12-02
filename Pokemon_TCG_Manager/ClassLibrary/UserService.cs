@@ -26,7 +26,7 @@ namespace Pokemon_TCG_Manager.ClassLibrary
             if (result.Rows.Count == 0)
                 return false;
 
-            userId = Convert.ToInt32(result.Rows[0]["UserId"]);
+            userId = Convert.ToInt32(result.Rows[0]["ID"]);
             return true;
         }
 

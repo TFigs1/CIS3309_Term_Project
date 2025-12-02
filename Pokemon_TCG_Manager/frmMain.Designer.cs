@@ -34,7 +34,7 @@
             // 
             // btnGoToCollections
             // 
-            this.btnGoToCollections.Location = new System.Drawing.Point(116, 626);
+            this.btnGoToCollections.Location = new System.Drawing.Point(1054, 805);
             this.btnGoToCollections.Name = "btnGoToCollections";
             this.btnGoToCollections.Size = new System.Drawing.Size(280, 36);
             this.btnGoToCollections.TabIndex = 0;
@@ -45,7 +45,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(92, 598);
+            this.label1.Location = new System.Drawing.Point(1075, 777);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(250, 25);
             this.label1.TabIndex = 1;

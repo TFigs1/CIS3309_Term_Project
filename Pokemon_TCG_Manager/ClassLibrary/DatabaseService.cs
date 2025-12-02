@@ -67,16 +67,23 @@ namespace Pokemon_TCG_Manager.ClassLibrary
 
         public int ExecuteInsertAndReturnId(string sql, params object[] parameters)
         {
-            using (OleDbConnection conn = new OleDbConnection(_connectionString))
-            using (OleDbCommand cmd = new OleDbCommand(sql, conn))
+            using (var conn = new OleDbConnection(_connectionString))
+            using (var cmd = new OleDbCommand(sql, conn))
             {
                 conn.Open();
 
-                foreach (var param in parameters)
-                    cmd.Parameters.AddWithValue("?", param);
+                // Add typed parameters instead of AddWithValue
+                    foreach (var param in parameters)
+                {
+                    if (param is int)
+                        cmd.Parameters.Add("?", OleDbType.Integer).Value = param;
+                    else if (param is DateTime)
+                        cmd.Parameters.Add("?", OleDbType.Date).Value = param;
+                    else
+                        cmd.Parameters.Add("?", OleDbType.VarWChar).Value = param ?? DBNull.Value;
+                }
 
                 cmd.ExecuteNonQuery();
-
                 cmd.CommandText = "SELECT @@IDENTITY";
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
@@ -86,7 +93,7 @@ namespace Pokemon_TCG_Manager.ClassLibrary
         public DataTable GetUserByCredentials(string username, string password)
         {
             return ExecuteQuery(
-                "SELECT * FROM Users WHERE UserName = ? AND Password = ?",
+                "SELECT * FROM tblUsers WHERE Username = ? AND Password = ?",
                 username, password
             );
         }
@@ -94,7 +101,7 @@ namespace Pokemon_TCG_Manager.ClassLibrary
         public bool UsernameExists(string username)
         {
             DataTable result = ExecuteQuery(
-                "SELECT * FROM Users WHERE UserName = ?",
+                "SELECT * FROM tblUsers WHERE Username = ?",
                 username
             );
             return result.Rows.Count > 0;
@@ -102,8 +109,9 @@ namespace Pokemon_TCG_Manager.ClassLibrary
 
         public int CreateUser(string username, string password)
         {
+            // Escape field names that might be reserved words
             return ExecuteInsertAndReturnId(
-                "INSERT INTO Users (UserName, Password) VALUES (?, ?)",
+                "INSERT INTO tblUsers ([Username], [Password]) VALUES (?, ?)",
                 username, password
             );
         }
