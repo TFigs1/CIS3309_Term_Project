@@ -40,7 +40,6 @@
             this.btnGoToCollections.TabIndex = 0;
             this.btnGoToCollections.Text = "Go to collections";
             this.btnGoToCollections.UseVisualStyleBackColor = true;
-            this.btnGoToCollections.Click += new System.EventHandler(this.btnGoToCollections_Click);
             // 
             // label1
             // 
@@ -50,7 +49,6 @@
             this.label1.Size = new System.Drawing.Size(250, 25);
             this.label1.TabIndex = 1;
             this.label1.Text = "Card Collection Manager";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // frmMain
             // 
