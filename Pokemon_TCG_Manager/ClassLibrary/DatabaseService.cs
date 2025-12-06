@@ -165,128 +165,16 @@ namespace Pokemon_TCG_Manager.ClassLibrary
             return ExecuteQuery(sql, userId);
         }
 
-
-        /* method not matched to real db naming */
-        //public int InsertCard(Card c)
-        //{
-        //    return ExecuteInsertAndReturnId(
-        //        "INSERT INTO Cards (SetId, PokedexNumber, CardName, Rarity, Supertype, Subtype, Health, Price, CardImage) " +
-        //        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        //        c.SetId, c.PokedexNumber, c.CardName, c.Rarity,
-        //        c.Supertype, c.Subtype, c.Health, c.Price, c.CardImage
-        //    );
-        //}
+        public void DeleteOwnedCard(int userId, int cardId)
+        {
+            ExecuteNonQuery(
+                "DELETE FROM tblOwnedCards WHERE UserID = ? AND CardID = ?",
+                userId,
+                cardId
+            );
+        }
 
 
-
-        // lesson tutor specific methods
-        //public DataTable GetAllLessons()
-        //{
-        //    return ExecuteQuery("SELECT * FROM Lessons");
-        //}
-
-        //public DataTable GetLessonItems(int lessonId)
-        //{
-        //    return ExecuteQuery(
-        //        "SELECT * FROM LessonItems WHERE LessonId = ?",
-        //        lessonId
-        //    );
-        //}
-
-        //public int InsertLesson(string title, string topic, string description, int minutes)
-        //{
-        //    return ExecuteInsertAndReturnId(
-        //        "INSERT INTO Lessons (Title, Topic, Description, EstimatedMinutes, Completed, LastGrade) VALUES (?, ?, ?, ?, ?, ?)",
-        //        title, topic, description, minutes, false, 0.0
-        //    );
-        //}
-
-        //public void InsertLessonItem(int lessonId, string prompt, string answer, string imageUrl)
-        //{
-        //    ExecuteNonQuery(
-        //        "INSERT INTO LessonItems (LessonId, Prompt, CorrectAnswer, ImageUrl) VALUES (?, ?, ?, ?)",
-        //        lessonId, prompt, answer, imageUrl
-        //    );
-        //}
-
-        //public void InsertLessonResult(int lessonId, int correct, int total, double duration)
-        //{
-        //    using (var conn = new OleDbConnection(_connectionString))
-        //    using (var cmd = new OleDbCommand(
-        //        "INSERT INTO LessonResults (LessonId, DateTaken, Correct, Total, DurationSeconds) VALUES (?, ?, ?, ?, ?)", conn))
-        //    {
-        //        conn.Open();
-
-        //        cmd.Parameters.Add("?", OleDbType.Integer).Value = lessonId;
-        //        cmd.Parameters.Add("?", OleDbType.Date).Value = DateTime.Now;
-        //        cmd.Parameters.Add("?", OleDbType.Integer).Value = correct;
-        //        cmd.Parameters.Add("?", OleDbType.Integer).Value = total;
-        //        cmd.Parameters.Add("?", OleDbType.Double).Value = duration;
-
-        //        cmd.ExecuteNonQuery();
-        //    }
-        //}
-
-
-
-        //public void DeleteLesson(int lessonId)
-        //{
-        //    ExecuteNonQuery("DELETE FROM LessonItems WHERE LessonId = ?", lessonId);
-        //    ExecuteNonQuery("DELETE FROM Lessons WHERE LessonId = ?", lessonId);
-        //}
-
-        //public void UpdateLessonCompletedAndGrade(int lessonId, bool completed, double grade)
-        //{
-        //    using (var conn = new OleDbConnection(_connectionString))
-        //    using (var cmd = new OleDbCommand(
-        //        "UPDATE Lessons SET Completed = ?, LastGrade = ? WHERE LessonId = ?", conn))
-        //    {
-        //        conn.Open();
-
-        //        cmd.Parameters.Add("?", OleDbType.Boolean).Value = completed;
-        //        cmd.Parameters.Add("?", OleDbType.Double).Value = grade;
-        //        cmd.Parameters.Add("?", OleDbType.Integer).Value = lessonId;
-
-        //        cmd.ExecuteNonQuery();
-        //    }
-        //}
-        //public DataTable SearchLessons(string keyword)
-        //{
-        //    keyword = $"%{keyword}%";
-        //    return ExecuteQuery(
-        //        "SELECT * FROM Lessons WHERE Title LIKE ? OR Topic LIKE ?",
-        //        keyword,
-        //        keyword
-        //    );
-        //}
-        //public DataTable GetIncompleteLessons()
-        //{
-        //    return ExecuteQuery("SELECT * FROM Lessons WHERE Completed = False");
-        //}
-        //public DataTable GetLessonsSortedByGrade(bool ascending)
-        //{
-        //    string order = ascending ? "ASC" : "DESC";
-        //    return ExecuteQuery($"SELECT * FROM Lessons ORDER BY LastGrade {order}");
-        //}
-        //public void UpdateLessonStatus(int lessonId, bool completed, double lastGrade)
-        //{
-        //    ExecuteNonQuery(
-        //        "UPDATE Lessons SET Completed = ?, LastGrade = ? WHERE LessonId = ?",
-        //        completed,
-        //        lastGrade,
-        //        lessonId
-        //    );
-        //}
-        //public DataTable GetLessonsByMinGrade(double minGrade)
-        //{
-
-        //    string sql =
-        //        "SELECT LessonId, Title, Topic, Description, EstimatedMinutes, LastGrade, Completed " +
-        //        "FROM Lessons " +
-        //        "WHERE IIf(IsNull([LastGrade]), 0, [LastGrade]) >= ?";
-
-        //    return ExecuteQuery(sql, minGrade);
-        //}
 
 
 

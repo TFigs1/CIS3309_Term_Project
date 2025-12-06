@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 namespace Pokemon_TCG_Manager
 {
+    // Navigation form - All components created at runtime
     public partial class frmMain : Form
     {
         private int _userID;
@@ -67,7 +68,7 @@ namespace Pokemon_TCG_Manager
 
             // Add click handlers that open target forms by name (reflection-based so missing forms won't break compile)
             btnCollections.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmCollections");
-            //btnSearch.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmSearch");
+            btnSearch.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmSearch");
             //btnWishlist.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmWishlist");
 
             // Add buttons to table

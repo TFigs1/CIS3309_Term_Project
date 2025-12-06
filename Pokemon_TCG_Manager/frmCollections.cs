@@ -49,41 +49,35 @@ namespace Pokemon_TCG_Manager
                 lstOwnedCards.Items.Add(card);
             }
         }
-
+        Card selected = null;
         private void lstOwnedCards_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lstOwnedCards.SelectedIndex == -1) return;
 
-            Card selected = ownedCards[lstOwnedCards.SelectedIndex];
+            selected = ownedCards[lstOwnedCards.SelectedIndex];
 
-            // Update textboxes/fields
-            /* 
-             * Not yet fully implemented 
-             */
-            txtRarity.Text = selected.Rarity;
-            txtPrice.Text = selected.Price.ToString("C");
-            numQuantity.Value = selected.Quantity;
-            //txtSupertype.Text = selected.Supertype;
-            //txtSubtype.Text = selected.Subtype;
-            //numHealth.Value = selected.Health;
-
-            //// Try to load card image
-            //try
-            //{
-            //    picCardImage.Image = Image.FromFile($"Images\\{selected.CardImage}");
-            //}
-            //catch
-            //{
-            //    picCardImage.Image = null;
-            //}
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (lstOwnedCards.SelectedIndex == -1) return;
-            // update delete method
-            ownedCards.RemoveAt(lstOwnedCards.SelectedIndex);
-            DisplayCards();
+
+            int index = lstOwnedCards.SelectedIndex;
+            Card cardToDelete = ownedCards[index];
+
+            var confirm = MessageBox.Show(
+                $"Delete \"{cardToDelete.CardName}\" from your collection?",
+                "Confirm Delete",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (confirm != DialogResult.Yes)
+                return;
+
+            _db.DeleteOwnedCard(_currentUserId, cardToDelete.CardID);
+
+            LoadUserOwnedCards();
         }
 
         
