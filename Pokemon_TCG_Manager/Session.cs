@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pokemon_TCG_Manager
 {
+    
     public static class Session
     {
         public static int LoggedInUserId { get; set; }

@@ -11,7 +11,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Pokemon_TCG_Manager
-{
+{   // tis form contains on line 110 a method that has the capability of opening a window to select a file from the
+    // local computer file system and import into the application. 
+    // Though working with images is not inheriently new, letting the user select an image during the programs runtime
+    // is new as previously I have only worked with hardcoding the image paths into the program
+    // This was something new I had to research and learn how to implement - Tim Figueroa
     public partial class frmAddCard : Form
     {
         public Card NewCard;
@@ -23,6 +27,7 @@ namespace Pokemon_TCG_Manager
             InitializeComponent();
             _currentUserId = userId;
             _db = new DatabaseService();
+
             // Populate Rarity dropdown
             cmbRarity.Items.AddRange(new string[]
             {
@@ -30,14 +35,73 @@ namespace Pokemon_TCG_Manager
             });
             cmbRarity.SelectedIndex = 0;
 
-            // Populate Set dropdown (for now, just dummy data)
-            cmbSet.Items.AddRange(new string[]
+            // Populate Set dropdown from database (distinct set values from tblCards)
+            try
             {
-                "Obsidian Flames",
-                "Temporal Forces",
-                "Twilight Masquerade"
-            });
-            cmbSet.SelectedIndex = 0;
+                DataTable dt = _db.GetAllCards();
+                var sets = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    // Prefer textual set name columns if present
+                    string setColumn = null;
+                    if (dt.Columns.Contains("SetName"))
+                        setColumn = "SetName";
+                    else if (dt.Columns.Contains("SetTitle"))
+                        setColumn = "SetTitle";
+                    else if (dt.Columns.Contains("Set"))
+                        setColumn = "Set";
+
+                    if (!string.IsNullOrEmpty(setColumn))
+                    {
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            var val = row[setColumn];
+                            if (val != null)
+                            {
+                                string s = val.ToString().Trim();
+                                if (!string.IsNullOrEmpty(s))
+                                    sets.Add(s);
+                            }
+                        }
+                    }
+                    else if (dt.Columns.Contains("SetID"))
+                    {
+                        // Fallback to SetID when no textual set name exists
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            var val = row["SetID"];
+                            if (val != null && int.TryParse(val.ToString(), out int id))
+                            {
+                                sets.Add($"Set {id}");
+                            }
+                            else if (val != null)
+                            {
+                                // non-integer fallback
+                                string s = val.ToString().Trim();
+                                if (!string.IsNullOrEmpty(s))
+                                    sets.Add($"Set {s}");
+                            }
+                        }
+                    }
+                }
+
+                if (sets.Count > 0)
+                {
+                    cmbSet.Items.AddRange(sets.ToArray());
+                    cmbSet.SelectedIndex = 0;
+                }
+                else
+                {
+                    // No sets found: leave cmbSet empty so UI can handle or user can type/select manually.
+                }
+            }
+            catch (Exception ex)
+            {
+                // If DB fails, do not crash the form; optionally log the exception.
+                // For now, just leave cmbSet empty.
+                Console.WriteLine("Failed to load sets: " + ex.Message);
+            }
         }
 
         private void label4_Click(object sender, EventArgs e)
