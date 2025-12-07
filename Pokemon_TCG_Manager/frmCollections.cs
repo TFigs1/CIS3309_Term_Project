@@ -120,6 +120,19 @@ namespace Pokemon_TCG_Manager
                 LoadUserOwnedCards();  // refresh collection list
         }
 
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (lstOwnedCards.SelectedIndex == -1) return;
+
+            Card cardToEdit = ownedCards[lstOwnedCards.SelectedIndex];
+
+            frmAddCard editForm = new frmAddCard(_currentUserId, cardToEdit);
+
+            if (editForm.ShowDialog() == DialogResult.OK)
+            {
+                LoadUserOwnedCards();
+            }
+        }
     }
 
 
