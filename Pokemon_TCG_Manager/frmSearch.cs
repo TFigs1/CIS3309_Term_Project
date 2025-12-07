@@ -91,5 +91,23 @@ namespace Pokemon_TCG_Manager
         {
 
         }
+
+        private void btnAddToWIshList_Click(object sender, EventArgs e)
+        {
+            int cardId = Convert.ToInt32(dgvResults.CurrentRow.Cells["CardID"].Value);
+
+            String sql = "INSERT INTO tblWishlist (CardID) VALUES (?)";
+            _db.ExecuteNonQuery(sql, cardId);
+        }
+
+        private void btnAddToCollection_Click(object sender, EventArgs e)
+        {
+            int cardId = Convert.ToInt32(dgvResults.CurrentRow.Cells["CardID"].Value);
+
+            int userId = Session.LoggedInUserId;
+            string sql = "INSERT INTO tblOwnedCards (UserID, CardID, Quantity) VALUES (?, ?, ?)";
+            _db.ExecuteNonQuery(sql, userId, cardId, 1);
+               
+        }
     }
 }

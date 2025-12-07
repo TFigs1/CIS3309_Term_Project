@@ -65,7 +65,8 @@ namespace Pokemon_TCG_Manager
             int wishlistId = Convert.ToInt32(dgvWishlist.CurrentRow.Cells["WishlistID"].Value);
 
             // insert the card into the collection
-            string sqlInsert = "INSERT INTO tblCollection (CardID) VALUES (?)";
+            int userId = Session.LoggedInUserId;
+            string sqlInsert = "INSERT INTO tblOwnedCards (UserID, CardID, Quantity) VALUES (?, ?, ?)";
             _db.ExecuteNonQuery(sqlInsert, cardId);
 
             // delete it from wishlist

@@ -119,6 +119,7 @@
             this.btnAddToWIshList.TabIndex = 8;
             this.btnAddToWIshList.Text = "Add to Wishlist";
             this.btnAddToWIshList.UseVisualStyleBackColor = true;
+            this.btnAddToWIshList.Click += new System.EventHandler(this.btnAddToWIshList_Click);
             // 
             // btnAddToCollection
             // 
@@ -128,6 +129,7 @@
             this.btnAddToCollection.TabIndex = 9;
             this.btnAddToCollection.Text = "Add to Collection";
             this.btnAddToCollection.UseVisualStyleBackColor = true;
+            this.btnAddToCollection.Click += new System.EventHandler(this.btnAddToCollection_Click);
             // 
             // frmSearch
             // 
