@@ -169,5 +169,11 @@ namespace Pokemon_TCG_Manager
                 MessageBox.Show($"Opening form failed: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void btnWishlists_Click(object sender, EventArgs e)
+        {
+            frmWishlist frmWishlist = new frmWishlist();
+            frmWishlist.ShowDialog();
+        }
     }
 }

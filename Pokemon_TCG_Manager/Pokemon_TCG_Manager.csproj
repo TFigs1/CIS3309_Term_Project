@@ -70,6 +70,12 @@
   <ItemGroup>
     <Compile Include="ClassLibrary\Card.cs" />
     <Compile Include="ClassLibrary\DatabaseService.cs" />
+    <Compile Include="frmWishlist.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmWishlist.Designer.cs">
+      <DependentUpon>frmWishlist.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSearch.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,6 +133,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmSearch.resx">
       <DependentUpon>frmSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmWishlist.resx">
+      <DependentUpon>frmWishlist.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
