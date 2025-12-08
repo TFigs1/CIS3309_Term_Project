@@ -175,10 +175,7 @@ namespace Pokemon_TCG_Manager
             }
         }
 
-        private void btnWishlists_Click(object sender, EventArgs e)
-        {
 
-        }
 
 
         
