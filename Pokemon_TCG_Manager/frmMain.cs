@@ -178,8 +178,8 @@ namespace Pokemon_TCG_Manager
 
         private void btnSetOverview_Click(object sender, EventArgs e)
         {
-            frmSetOverview setOverviewForm = new frmSetOverview();
-            setOverviewForm.ShowDialog();
+            frmSetOverview setOverview = new frmSetOverview();
+            setOverview.ShowDialog();
         }
     }
 }
