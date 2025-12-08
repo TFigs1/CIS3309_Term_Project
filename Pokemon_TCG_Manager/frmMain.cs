@@ -20,7 +20,7 @@ namespace Pokemon_TCG_Manager
             _userID = userid;
             prevFrm = loginFrm;
 
-            // Remove designer-created controls if present (safe even if they don't exist)
+            // Remove original designer built components - just to ensure everything from designer is removed
             if (this.Controls.ContainsKey("label1"))
                 this.Controls.RemoveByKey("label1");
             if (this.Controls.ContainsKey("btnGoToCollections"))
@@ -37,7 +37,8 @@ namespace Pokemon_TCG_Manager
         }
 
         // Create three evenly spaced, horizontally-growing buttons centered in the form.
-        // Buttons: Collections, Search, Wishlist (change labels/names as you prefer)
+        // Buttons: Collections, Search, Wishlist 
+        // NEED TO ADD DECK BUTTON
         private void CreateRuntimeNavigation()
         {
             // TableLayoutPanel gives evenly spaced columns (percent)
@@ -69,7 +70,7 @@ namespace Pokemon_TCG_Manager
             // Add click handlers that open target forms by name (reflection-based so missing forms won't break compile)
             btnCollections.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmCollections");
             btnSearch.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmSearch");
-            //btnWishlist.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmWishlist");
+            btnWishlist.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmWishlist");
 
             // Add buttons to table
             table.Controls.Add(btnCollections, 0, 0);
@@ -178,8 +179,9 @@ namespace Pokemon_TCG_Manager
 
         private void btnSetOverview_Click(object sender, EventArgs e)
         {
-            frmSetOverview setOverview = new frmSetOverview();
-            setOverview.ShowDialog();
+ 
+
         }
+
     }
 }
