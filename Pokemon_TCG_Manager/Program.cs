@@ -16,7 +16,8 @@ namespace Pokemon_TCG_Manager
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmLogin());
+            Session.LoggedInUserId = 1;            // fake logged-in user
+            Application.Run(new frmMain(1, null)); // open main form
         }
     }
 }

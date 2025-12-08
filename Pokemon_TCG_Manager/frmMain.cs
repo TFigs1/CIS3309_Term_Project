@@ -45,7 +45,7 @@ namespace Pokemon_TCG_Manager
             var table = new TableLayoutPanel
             {
                 Name = "tlpNav",
-                ColumnCount = 3,
+                ColumnCount = 4,
                 RowCount = 1,
                 Dock = DockStyle.None,
                 AutoSize = false,
@@ -55,7 +55,7 @@ namespace Pokemon_TCG_Manager
 
             // evenly distribute columns
             table.ColumnStyles.Clear();
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
                 table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333f));
 
             // center table in the form
@@ -66,16 +66,20 @@ namespace Pokemon_TCG_Manager
             var btnCollections = MakeNavButton("btnCollections", "Collections");
             var btnSearch = MakeNavButton("btnSearch", "Search");
             var btnWishlist = MakeNavButton("btnWishlist", "Wishlist");
+            var btnSetOverview = MakeNavButton("btnSetOverview", "Set Overview");
 
             // Add click handlers that open target forms by name (reflection-based so missing forms won't break compile)
             btnCollections.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmCollections");
             btnSearch.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmSearch");
             btnWishlist.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmWishlist");
+            btnSetOverview.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmSetOverview");
+
 
             // Add buttons to table
             table.Controls.Add(btnCollections, 0, 0);
             table.Controls.Add(btnSearch, 1, 0);
             table.Controls.Add(btnWishlist, 2, 0);
+            table.Controls.Add(btnSetOverview, 3, 0);
 
             // Set each button to fill its cell with some padding
             foreach (Control c in table.Controls)
