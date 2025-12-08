@@ -22,6 +22,10 @@ namespace Pokemon_TCG_Manager
         private int _currentUserId;
         private DatabaseService _db;
 
+        // edit mode fields
+        private bool _isEditMode = false;
+        private int _editingCardId = 0;
+
         public frmAddCard(int userId)
         {
             InitializeComponent();
@@ -35,65 +39,22 @@ namespace Pokemon_TCG_Manager
             });
             cmbRarity.SelectedIndex = 0;
 
-            // Populate Set dropdown from database (distinct set values from tblCards)
+            // Populate Set dropdown from tblSets
             try
             {
-                DataTable dt = _db.GetAllCards();
-                var sets = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
-
+                DataTable dt = _db.GetAllSets();
                 if (dt != null && dt.Rows.Count > 0)
                 {
-                    // Prefer textual set name columns if present
-                    string setColumn = null;
-                    if (dt.Columns.Contains("SetName"))
-                        setColumn = "SetName";
-                    else if (dt.Columns.Contains("SetTitle"))
-                        setColumn = "SetTitle";
-                    else if (dt.Columns.Contains("Set"))
-                        setColumn = "Set";
-
-                    if (!string.IsNullOrEmpty(setColumn))
-                    {
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            var val = row[setColumn];
-                            if (val != null)
-                            {
-                                string s = val.ToString().Trim();
-                                if (!string.IsNullOrEmpty(s))
-                                    sets.Add(s);
-                            }
-                        }
-                    }
-                    else if (dt.Columns.Contains("SetID"))
-                    {
-                        // Fallback to SetID when no textual set name exists
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            var val = row["SetID"];
-                            if (val != null && int.TryParse(val.ToString(), out int id))
-                            {
-                                sets.Add($"Set {id}");
-                            }
-                            else if (val != null)
-                            {
-                                // non-integer fallback
-                                string s = val.ToString().Trim();
-                                if (!string.IsNullOrEmpty(s))
-                                    sets.Add($"Set {s}");
-                            }
-                        }
-                    }
-                }
-
-                if (sets.Count > 0)
-                {
-                    cmbSet.Items.AddRange(sets.ToArray());
+                    // use DataSource so each item has a SetName (display) and SetID (value)
+                    cmbSet.DisplayMember = "SetName";
+                    cmbSet.ValueMember = "SetID";
+                    cmbSet.DataSource = dt;
                     cmbSet.SelectedIndex = 0;
                 }
                 else
                 {
-                    // No sets found: leave cmbSet empty so UI can handle or user can type/select manually.
+                    // fallback: leave empty so user can type/select manually
+                    cmbSet.Items.Clear();
                 }
             }
             catch (Exception ex)
@@ -102,6 +63,71 @@ namespace Pokemon_TCG_Manager
                 // For now, just leave cmbSet empty.
                 Console.WriteLine("Failed to load sets: " + ex.Message);
             }
+        }
+
+        // new constructor for edit mode
+        public frmAddCard(int userId, Card cardToEdit) : this(userId)
+        {
+            if (cardToEdit == null) return;
+
+            _isEditMode = true;
+            _editingCardId = cardToEdit.CardID;
+
+            // Select the set by its SetID (ValueMember)
+            try
+            {
+                if (cardToEdit.SetID > 0 && cmbSet.DataSource != null)
+                {
+                    cmbSet.SelectedValue = cardToEdit.SetID;
+                }
+                else if (cmbSet.Items.Count > 0)
+                {
+                    cmbSet.SelectedIndex = 0;
+                }
+            }
+            catch
+            {
+                // ignore selection issues
+            }
+
+            txtCardNumber.Text = cardToEdit.CardNumber;
+            txtCardName.Text = cardToEdit.CardName;
+            cmbRarity.Text = cardToEdit.Rarity;
+            txtSupertype.Text = cardToEdit.Supertype;
+            txtSubtype.Text = cardToEdit.Subtype;
+            try
+            {
+                numHealth.Value = Math.Max(numHealth.Minimum, Math.Min(numHealth.Maximum, cardToEdit.Health));
+            }
+            catch { /* ignore if out of range */ }
+
+            txtPrice.Text = cardToEdit.Price.ToString("0.00");
+            txtImagePath.Text = cardToEdit.CardImage ?? string.Empty;
+
+            // Try to load preview image if path exists
+            try
+            {
+                string imagePath = cardToEdit.CardImage;
+                if (!string.IsNullOrWhiteSpace(imagePath))
+                {
+                    if (File.Exists(imagePath))
+                        picPreview.Image = Image.FromFile(imagePath);
+                    else
+                    {
+                        // If stored value is just filename, try to load from app directory
+                        string appImage = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imagePath);
+                        if (File.Exists(appImage))
+                            picPreview.Image = Image.FromFile(appImage);
+                    }
+                }
+            }
+            catch
+            {
+                // ignore preview problems
+            }
+
+            // update button text to indicate edit
+            btnSave.Text = "Save Changes";
         }
 
         private void label4_Click(object sender, EventArgs e)
@@ -145,10 +171,24 @@ namespace Pokemon_TCG_Manager
                 return;
             }
 
+            // Determine SetID from combo (ValueMember) or fallback to SelectedIndex + 1
+            int setId = 0;
+            try
+            {
+                if (cmbSet.SelectedValue != null && int.TryParse(cmbSet.SelectedValue.ToString(), out int parsed))
+                    setId = parsed;
+                else
+                    setId = cmbSet.SelectedIndex >= 0 ? cmbSet.SelectedIndex + 1 : 0;
+            }
+            catch
+            {
+                setId = cmbSet.SelectedIndex >= 0 ? cmbSet.SelectedIndex + 1 : 0;
+            }
+
             // Build card object
             Card newCard = new Card
             {
-                SetID = cmbSet.SelectedIndex + 1,
+                SetID = setId,
                 CardNumber = txtCardNumber.Text.Trim(),
                 CardName = txtCardName.Text.Trim(),
                 Rarity = cmbRarity.Text,
@@ -159,10 +199,22 @@ namespace Pokemon_TCG_Manager
                 CardImage = txtImagePath.Text.Trim()
             };
 
-            // 1. Insert into tblCards
+            if (_isEditMode)
+            {
+                // update existing card
+                newCard.CardID = _editingCardId;
+                _db.UpdateCard(newCard);
+
+                MessageBox.Show("Card updated successfully!");
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+                return;
+            }
+
+            // Insert into tblCards
             int cardId = _db.InsertCard(newCard);   // returns AutoNumber ID
 
-            // 2. Insert into tblOwnedCards for current user
+            // Insert into tblOwnedCards for current user
             _db.InsertOwnedCard(_currentUserId, cardId, 1);
 
             MessageBox.Show("Card added successfully!");

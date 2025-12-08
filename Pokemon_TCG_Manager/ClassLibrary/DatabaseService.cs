@@ -123,6 +123,12 @@ namespace Pokemon_TCG_Manager.ClassLibrary
             return ExecuteQuery("SELECT * FROM tblCards ORDER BY CardName");
         }
 
+        //  return sets table rows (SetID, SetName)
+        public DataTable GetAllSets()
+        {
+            return ExecuteQuery("SELECT * FROM tblSets ORDER BY SetName");
+        }
+
         public int InsertCard(Card c)
         {
             string sql =
@@ -140,6 +146,28 @@ namespace Pokemon_TCG_Manager.ClassLibrary
                 c.Health,
                 c.Price,
                 c.CardImage
+            );
+        }
+
+        // update existing card
+        public int UpdateCard(Card c)
+        {
+            string sql =
+                "UPDATE tblCards SET SetID = ?, CardNumber = ?, CardName = ?, Rarity = ?, Supertype = ?, Subtype = ?, Health = ?, Price = ?, CardImage = ? " +
+                "WHERE CardID = ?";
+
+            return ExecuteNonQuery(
+                sql,
+                c.SetID,
+                c.CardNumber,
+                c.CardName,
+                c.Rarity,
+                c.Supertype,
+                c.Subtype,
+                c.Health,
+                c.Price,
+                c.CardImage,
+                c.CardID
             );
         }
 
@@ -173,12 +201,6 @@ namespace Pokemon_TCG_Manager.ClassLibrary
                 cardId
             );
         }
-
-
-
-
-
-
 
     }
 }

@@ -72,7 +72,6 @@ namespace Pokemon_TCG_Manager
             btnCollections.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmCollections");
             btnSearch.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmSearch");
             btnWishlist.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmWishlist");
-            btnSetOverview.Click += (s, e) => OpenFormByName("Pokemon_TCG_Manager.frmSetOverview");
 
 
             // Add buttons to table
@@ -175,13 +174,10 @@ namespace Pokemon_TCG_Manager
             }
         }
 
-
-
-
-        
- 
-
+        private void btnWishlists_Click(object sender, EventArgs e)
+        {
+            frmWishlist frmWishlist = new frmWishlist();
+            frmWishlist.ShowDialog();
         }
-
     }
-
+}
