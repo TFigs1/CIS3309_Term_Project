@@ -175,5 +175,11 @@ namespace Pokemon_TCG_Manager
             frmWishlist frmWishlist = new frmWishlist();
             frmWishlist.ShowDialog();
         }
+
+        private void btnSetOverview_Click(object sender, EventArgs e)
+        {
+            frmSetOverview setOverviewForm = new frmSetOverview();
+            setOverviewForm.ShowDialog();
+        }
     }
 }

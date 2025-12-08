@@ -70,6 +70,12 @@
   <ItemGroup>
     <Compile Include="ClassLibrary\Card.cs" />
     <Compile Include="ClassLibrary\DatabaseService.cs" />
+    <Compile Include="frmSetOverview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSetOverview.Designer.cs">
+      <DependentUpon>frmSetOverview.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmWishlist.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,6 +139,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmSearch.resx">
       <DependentUpon>frmSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSetOverview.resx">
+      <DependentUpon>frmSetOverview.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmWishlist.resx">
       <DependentUpon>frmWishlist.cs</DependentUpon>
