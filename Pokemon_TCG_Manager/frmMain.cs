@@ -180,11 +180,11 @@ namespace Pokemon_TCG_Manager
 
         }
 
-        private void btnSetOverview_Click(object sender, EventArgs e)
-        {
+
+        
  
 
         }
 
     }
-}
+
