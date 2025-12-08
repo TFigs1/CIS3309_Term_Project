@@ -173,8 +173,7 @@ namespace Pokemon_TCG_Manager
 
         private void btnWishlists_Click(object sender, EventArgs e)
         {
-            frmWishlist frmWishlist = new frmWishlist();
-            frmWishlist.ShowDialog();
+
         }
 
         private void btnSetOverview_Click(object sender, EventArgs e)
